@@ -6,13 +6,14 @@ const users = require("./routes/api/users");
 const tweets = require("./routes/api/tweets");
 const User = require("./models/User")
 const bodyParser = require('body-parser');
+const passport= require('passport');
 
 mongoose
     .connect(db, { useNewUrlParser: true })
     .then(() => console.log("Connected to MongoDB successfully"))
     .catch(err => console.log(err));
 
-    
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false}));
 
@@ -25,6 +26,9 @@ app.get("/", (req, res) => {
     user.save()
     res.send("Hello World, This is MERN")
 });
+
+app.use(passport.initialize());
+require('./config/passport')(passport);
 
 app.use("/api/users", users);
 app.use("/api/tweets", tweets);
